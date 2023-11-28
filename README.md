@@ -71,3 +71,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 melaniefauchard06wEeqnmMBTnFPO8l
 "axios": "^1.6.2",
+"proxy": "http://localhost:3001/api/v1/user/login",
