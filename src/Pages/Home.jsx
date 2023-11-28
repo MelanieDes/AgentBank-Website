@@ -6,8 +6,8 @@ const Home = () => {
     return (        
             <main>
                 <section>
-                    <Hero />
-                    <Features />
+                    <Hero />                    
+                    <Features />                    
                 </section>                
             </main>           
         

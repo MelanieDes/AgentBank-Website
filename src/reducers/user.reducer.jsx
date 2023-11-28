@@ -1,4 +1,4 @@
-const initialState = { user: "From Scratch" };
+const initialState = {};
 
 export default function userReducer(state = initialState, action) {
     return state;
