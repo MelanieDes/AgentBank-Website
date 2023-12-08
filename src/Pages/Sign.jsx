@@ -13,17 +13,18 @@ const Sign = () => {
     const navigate = useNavigate();
     const userName = useSelector((state) => state.formulaire.userName);
     const password = useSelector((state) => state.formulaire.password);
+    const essai = useSelector((state) => state.auth)
     const [rememberMe, setRememberMe] = useState(false);
 
     //Changement dans les entrées du formulaire
     const handleUsernameChange = (event) => {
         dispatch(setUsername(event.target.value));
-        console.log(userName);
+        console.log('userName:', event.target.value);
     };
 
     const handlePasswordChange = (event) => {
         dispatch(setPassword(event.target.value));
-        console.log(password);
+        console.log('password:', event.target.value);
     };
 
     const handleRememberMeChange = (event) => {
@@ -34,6 +35,9 @@ const Sign = () => {
   const clickSubmit = async (e) => {
     e.preventDefault();
 
+    console.log('userName:', userName);
+    console.log('password:', password);
+    //Vérifie si userName et password ne sont pas vide, si vide alors message d'erreur. fonction trim sert à enlever les espaces vides en début et fin de chaine de caractère.
     if (!userName.trim() || !password.trim()) {
       alert("Username and password cannot be empty");
       return;
@@ -44,20 +48,25 @@ const Sign = () => {
       password: password,
     };
     
+    // Appel de la fonction loginUser avec infos en objet cidessus. Effectue une requête d'authentification API.
     const response = await loginUser(infos);
     console.log(response);
     
+    // Vérifie si le statut de la réponse est réussi
     if (response.status === 200) {
+      //Vérifie
       if (rememberMe) {
         localStorage.setItem("token", response.body.token);
       } else {
         localStorage.removeItem("token");
       }
+      // Envoi la focntion loginSuccess et récupère le token dans la réponse. 
       dispatch(loginSuccess(response.body.token));
-      navigate("/user");
+      console.log(essai);
+      navigate("/user"); // Si connexion réussi, envoi vers la page user
     }
   };
-    // Vérifi si l'utilisateur est déjà connecté
+    // Vérifie si l'utilisateur est déjà connecté
     useEffect(() => {
       const storedToken = localStorage.getItem("token");
       if (storedToken) {

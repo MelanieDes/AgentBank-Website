@@ -12,10 +12,11 @@ const authSlice = createSlice({
     name: "login",
     initialState,
     reducers: {
-        loginSucces: (state, action) => {
+        loginSucces: (state, action) => {            
             state.token = action.payload; //Mise à jour du token
             localStorage.setItem('token', action.payload); // Stockage du nouveau token dans le localStorage du navigateur
         }
+        
     }
 }) 
 

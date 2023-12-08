@@ -7,7 +7,8 @@ import formSlice from "../app/formSlice";
 const rootReducer = combineReducers({
     login : authSlice,
     formulaire : formSlice,
-    userInfo: userSlice
+    userInfo: userSlice,
+    devtools: true,
 });
 
 export default rootReducer;
