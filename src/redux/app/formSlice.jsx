@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Gère l'état du formulaire
 const formSlice = createSlice({
     name: "form",
     initialState : {
-        username: "",
+        userName: "",
         password: "",
     },
+    // Modification des propriétés userName et password en fonction des valeurs fournies dans l'action
     reducers:{
         setUsername: (state, action) =>{
-            state.username = action.payload;
+            state.userName = action.payload;
         },
         setPassword: (state, action) => {
             state.password = action.payload;

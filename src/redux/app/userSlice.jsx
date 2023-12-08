@@ -8,6 +8,7 @@ const initialState = {
   lastName: null,
 }
 
+// Gère l'information d'un utilisateur
 const userSlice = createSlice({
   name: 'userInfo',
   initialState,
