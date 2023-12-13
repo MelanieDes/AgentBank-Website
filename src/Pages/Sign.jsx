@@ -38,9 +38,9 @@ const Sign = () => {
       }
       // Analyse la réponse JSON
       const responseData = await response.json();
-      console.log(responseData);
+      console.log(responseData.body);
       // Extrait le token de la réponse et le dispatche dans le Redux store
-      const token = responseData.token;
+      const token = responseData.body.token;
       dispatch(setToken(token)); 
       navigate('/users')     
     } catch (error) {
