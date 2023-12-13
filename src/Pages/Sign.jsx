@@ -1,104 +1,76 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setUsername, setPassword } from "../redux/app/formSlice";
-
-import loginUser from "../redux/api/Login";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../redux/reducers/authSlice';
 import { useNavigate } from 'react-router-dom';
-import loginSuccess from "../redux/app/authSlice";
 
 const Sign = () => {
-
-    // Pour extraire le nom d'utilisateur et le mot de passe du formulaire
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const userName = useSelector((state) => state.formulaire.userName);
-    const password = useSelector((state) => state.formulaire.password);
-    const essai = useSelector((state) => state.auth)
-    const [rememberMe, setRememberMe] = useState(false);
-
-    //Changement dans les entrées du formulaire
-    const handleUsernameChange = (event) => {
-        dispatch(setUsername(event.target.value));
-        console.log('userName:', event.target.value);
-    };
-
-    const handlePasswordChange = (event) => {
-        dispatch(setPassword(event.target.value));
-        console.log('password:', event.target.value);
-    };
-
-    const handleRememberMeChange = (event) => {
-        setRememberMe(event.target.checked);
-      };
-   
-   //Soumission du formulaire, effectue une requête d'authentification avec lonUser puis mise à jour du store et du local storage avec le token si connexion réussie
-  const clickSubmit = async (e) => {
-    e.preventDefault();
-
-    console.log('userName:', userName);
-    console.log('password:', password);
-    //Vérifie si userName et password ne sont pas vide, si vide alors message d'erreur. fonction trim sert à enlever les espaces vides en début et fin de chaine de caractère.
-    if (!userName.trim() || !password.trim()) {
-      alert("Username and password cannot be empty");
-      return;
-    }
-    
-    let infos = {
-      userName: userName,
+  // Obtient la fonction dispatch du Redux store
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // États locaux pour stocker les valeurs des champs d'entrée (username et password)
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  // En-têtes à inclure dans la requête
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+  }; 
+  // Fonction appelée lors de la tentative de connexion
+  const handleSignIn = async () => {
+    // Crée un objet avec les informations d'identification à partir des états locaux
+    const data = {
+      email: username,
       password: password,
     };
-    
-    // Appel de la fonction loginUser avec infos en objet cidessus. Effectue une requête d'authentification API.
-    const response = await loginUser(infos);
-    console.log(response);
-    
-    // Vérifie si le statut de la réponse est réussi
-    if (response.status === 200) {
-      //Vérifie
-      if (rememberMe) {
-        localStorage.setItem("token", response.body.token);
-      } else {
-        localStorage.removeItem("token");
+
+    try {
+      // Effectue une requête POST vers le serveur d'authentification
+      const response = await fetch('http://localhost:3001/api/v1/user/login', {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(data),
+      });
+      // Vérifie si la requête a réussi (code de statut HTTP 2xx)
+      if (!response.ok) {
+        console.error('Erreur lors de la requête de connexion');
+        // Gérer l'erreur d'une manière appropriée pour l'utilisateur
+        return;
       }
-      // Envoi la focntion loginSuccess et récupère le token dans la réponse. 
-      dispatch(loginSuccess(response.body.token));
-      console.log(essai);
-      navigate("/user"); // Si connexion réussi, envoi vers la page user
+      // Analyse la réponse JSON
+      const responseData = await response.json();
+      console.log(responseData);
+      // Extrait le token de la réponse et le dispatche dans le Redux store
+      const token = responseData.token;
+      dispatch(setToken(token)); 
+      navigate('/users')     
+    } catch (error) {
+      // Gère les erreurs liées à la requête
+      console.error("Erreur lors de la requête", error);
+      // Gérer l'erreur d'une manière appropriée pour l'utilisateur
     }
   };
-    // Vérifie si l'utilisateur est déjà connecté
-    useEffect(() => {
-      const storedToken = localStorage.getItem("token");
-      if (storedToken) {
-        //Si token trouvé, l'action 
-        dispatch(loginSuccess(storedToken));
-        navigate("/user");
-      }
-    }, [dispatch, navigate]);
-
+  
     return (
         <div>
             <main className="main bg-dark">
                 <section className="sign-in-content">
                     <i className="fa fa-user-circle sign-in-icon"></i>
                     <h1>Sign In</h1>
-                    <form onSubmit={clickSubmit}>
+                    <form>
                         <div className="input-wrapper">
-                            <label htmlFor="username">Username</label>
-                            <input type="text" id="username" value={userName}
-              onChange={handleUsernameChange} required />
+                            <label htmlFor="username" >Username</label>
+                            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)}/>
                         </div>
                         <div className="input-wrapper">
                             <label htmlFor="password">Password</label>
-                            <input type="password" id="password" value={password}
-              onChange={handlePasswordChange} required/>
+                            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
                         <div className="input-remember">
-                            <input type="checkbox" id="remember-me" checked={rememberMe} onChange={handleRememberMeChange}/>
+                            <input type="checkbox" id="remember-me" />
                             <label htmlFor="remember-me">Remember me</label>
-                        </div>                    
-                        <a href={"./users"} className="sign-in-button">Sign In</a>                    
-                    </form>
+                        </div>               
+                        <button type="button" className="sign-in-button" onClick={handleSignIn}>Sign In</button>    
+                    </form>                    
                 </section>
             </main>            
         </div>

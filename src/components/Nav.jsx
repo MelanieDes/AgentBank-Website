@@ -1,4 +1,3 @@
-import Home from "../Pages/Home";
 import logo from "../assets/img/argentBankLogo.png";
 
 function Nav() {
