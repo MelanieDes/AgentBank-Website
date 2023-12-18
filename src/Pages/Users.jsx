@@ -1,48 +1,12 @@
-import React, { useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../redux/reducers/authSlice';
+import React from 'react';
+import UserProfile from '../components/UserProfile';
 
-const Users = () => {
-  const token = useSelector((state) => state.auth.token);
-  const dispatch = useDispatch();
 
-  const fetchData = useCallback(async () => {
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    };
-
-    try {
-      const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-        method: 'POST',
-        headers: headers,
-      });
-
-      if (!response.ok) {
-        console.error('Erreur lors de la requête de profil');
-        return;
-      }
-
-      const data = await response.json();
-      console.log(data.body);
-      dispatch(setUser(data));
-    } catch (error) {
-      console.error('Erreur lors de la requête', error);
-    }
-  }, [dispatch, token]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
+const Users = () => {  
 
     return (
         <div>
-            <main className="main bg-dark">
-                <div className="header">
-                    <h1>Welcome back<br />Tony Jarvis!</h1>
-                    <button className="edit-button">Edit Name</button>
-                </div>
+            <UserProfile />
                 <h2 className="sr-only">Accounts</h2>
                 <section className="account">
                     <div className="account-content-wrapper">
@@ -74,7 +38,7 @@ const Users = () => {
                     <button className="transaction-button">View transactions</button>
                     </div>
                 </section>
-            </main>            
+            
         </div>
     );
 };
