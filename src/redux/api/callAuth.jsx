@@ -66,7 +66,7 @@ export const updateUsername = async (token, newUsername, dispatch) => {
   try {
     
     const response = await fetch("http://localhost:3001/api/v1/user/profile", {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
