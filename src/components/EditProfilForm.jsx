@@ -8,8 +8,9 @@ const EditProfileForm = ({ onCancel }) => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-  const [editedUsername, setEditedUsername] = useState(user.userName || "");
-  
+  const [editedUsername, setEditedUsername] = useState(user.userName || ""); 
+  const [firstname, setFirstname] = useState(user.firstName); 
+  const [lastname, setLastname] = useState(user.lastName); 
  
 
   const handleSaveButtonClick = async () => {
@@ -22,16 +23,45 @@ const EditProfileForm = ({ onCancel }) => {
   };
 
   return (
-    <div>
-      <label htmlFor="editedUsername">Username:</label>
-      <input
-        type="text"
-        id="editedUsername"
-        value={editedUsername}
-        onChange={(e) => setEditedUsername(e.target.value)}
-      />      
-      <button onClick={handleSaveButtonClick}>Save</button>
-      <button onClick={onCancel}>Cancel</button>
+    <div className='editProfil-main'>
+      <h2 className='editTitle'>Edit user info</h2>
+      <div className='editProfil-container'>
+        <label className='editLabelProfil' htmlFor="editedUsername">User name:</label>
+        <input className='editProfilInput'
+          type="text"
+          id="editedUsername"
+          value={editedUsername}
+          onChange={(e) => setEditedUsername(e.target.value)}
+        />
+      </div>
+      <div className='editProfil-container'>
+        <label className='editLabelProfil' htmlFor="editedUsername">First name:</label>
+        <input className='editProfilInput'
+          type="text"
+          id="editedFirstname"
+          value={firstname}
+          onChange={(e) => setFirstname(e.target.value)}
+          readOnly
+        />
+      </div>
+      <div className='editProfil-container'>
+        <label className='editLabelProfil' htmlFor="editedUsername">Last name:</label>
+        <input className='editProfilInput'
+          type="text"
+          id="editedLastname"
+          value={lastname}
+          onChange={(e) => setLastname(e.target.value)}
+          readOnly
+        /> 
+      </div>
+      <div className='editProfilButtonContainer'>
+        <button className='editProfilButton' onClick={handleSaveButtonClick}>Save</button>
+        <button className='editProfilButton' onClick={onCancel}>Cancel</button>
+      </div>
+      
+      
+       
+      
     </div>
   );
 };

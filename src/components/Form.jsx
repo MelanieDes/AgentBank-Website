@@ -23,7 +23,7 @@ const Form = () => {
     e.preventDefault();
     setError(null);
     await handleSignIn();
-  };
+  }; 
 
     return (
         <div>
@@ -42,6 +42,7 @@ const Form = () => {
                         </div> 
                         {error && <div className="error-message">{error}</div>}              
                         <button type="submit" className="sign-in-button">Sign In</button>    
+                        
                     </form>
             
         </div>

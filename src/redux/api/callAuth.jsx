@@ -44,7 +44,6 @@ export const signIn = async (username, password, dispatch, navigate) => {
 // Fonction pour récupérer le profil de l'utilisateur.
 export const fetchUserProfile = async (token, dispatch) => {
   try {
-    console.log('Tentative de récupération du profil avec le token :', token);
     
     const headers = {
       'Content-Type': 'application/json',
@@ -60,7 +59,6 @@ export const fetchUserProfile = async (token, dispatch) => {
       const data = await response.json();
       dispatch(setUser(data.body));
       dispatch(setUsername(data.body.userName));
-      console.log('Profil récupéré avec succès :', data.body);
 
     } else {
       console.error('Erreur lors de la requête de profil:', response.status, response.statusText);

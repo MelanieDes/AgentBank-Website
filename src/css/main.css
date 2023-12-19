@@ -46,6 +46,12 @@ body {
   font-weight: bold;
   color: #2c3e50;
 }
+.main-nav button {
+  border: none;
+  font-weight: bold;
+  color: #42b983;
+  background-color: white;
+}
 
 .main-nav a.router-link-exact-active {
   color: #42b983;
@@ -288,4 +294,49 @@ body {
   .transaction-button {
     width: 200px;
   }
+}
+
+.editProfil-main {
+  display: flex;
+  flex-direction: column;
+}
+.editProfil-container input {
+  height: 25px;
+  width: 150px;
+  margin-bottom: 10px;
+  border: 1px solid #98999a;
+  border-radius: 5px;  
+}
+
+#editedFirstname, #editedLastname {
+  background-color: #cdcdce;
+  color: #8e8e8e;
+}
+.editProfil-main {
+  background-color: white;
+}
+.editTitle {
+  color: #222;
+  font-size: 40px;
+}
+.editLabelProfil {
+  color: #222;
+  margin-right: 15px;
+}
+.editProfilButtonContainer {
+  margin-top: 20px;
+}
+.editProfilButton {
+  background-color: #42b983;
+  color: white;
+  height: 50px;
+  width: 150px;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 20px;
+}
+.main-nav-auth {
+  display: flex;
+  flex-direction: row;
 }
