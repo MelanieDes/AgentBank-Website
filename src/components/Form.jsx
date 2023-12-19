@@ -41,7 +41,7 @@ const Form = () => {
                             <label htmlFor="remember-me">Remember me</label>
                         </div> 
                         {error && <div className="error-message">{error}</div>}              
-                        <button type="submit" className="sign-in-button" onClick={handleSignIn}>Sign In</button>    
+                        <button type="submit" className="sign-in-button">Sign In</button>    
                     </form>
             
         </div>

@@ -1,4 +1,3 @@
-// UserProfile.js
 import React, { useEffect, useState } from 'react';
 import EditProfileForm from './EditProfilForm';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,18 +5,22 @@ import { fetchUserProfile } from '../redux/api/callAuth';
 
 const UserProfile = () => {
   const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token); // Ajoutez cette ligne
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchUserProfile(dispatch);
+      try {
+        await fetchUserProfile(token, dispatch); // Utilisez le token récupéré ici
+      } catch (error) {
+        console.error('Une erreur s\'est produite lors de la récupération du profil :', error);
+      }
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [token, dispatch]); // Ajoutez `token` à la liste des dépendances
 
-  
   const handleEditButtonClick = () => {
     setIsEditing(true);
   };
@@ -25,9 +28,9 @@ const UserProfile = () => {
   return (
     <main className="main bg-dark">
       <div className="header">
-          <div>
-            <h1>Welcome back<br />{user.userName}</h1>            
-          </div>
+        <div>
+          <h1>Welcome back<br />{user.userName}</h1>
+        </div>
         {isEditing ? (
           <EditProfileForm onCancel={() => setIsEditing(false)} />
         ) : (

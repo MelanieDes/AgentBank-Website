@@ -1,4 +1,4 @@
-import { setToken, setUser } from "../reducers/authSlice";
+import { setToken, setUser, setUsername } from "../reducers/authSlice";
 
 const headers = {
   "Accept": "application/json",
@@ -44,6 +44,7 @@ export const signIn = async (username, password, dispatch, navigate) => {
 // Fonction pour récupérer le profil de l'utilisateur.
 export const fetchUserProfile = async (token, dispatch) => {
   try {
+    console.log('Tentative de récupération du profil avec le token :', token);
     
     const headers = {
       'Content-Type': 'application/json',
@@ -58,6 +59,9 @@ export const fetchUserProfile = async (token, dispatch) => {
     if (response.ok) {
       const data = await response.json();
       dispatch(setUser(data.body));
+      dispatch(setUsername(data.body.userName));
+      console.log('Profil récupéré avec succès :', data.body);
+
     } else {
       console.error('Erreur lors de la requête de profil:', response.status, response.statusText);
     }
@@ -81,7 +85,7 @@ export const updateUsername = async (token, newUsername, dispatch) => {
 
     if (response.ok) {
       const data = await response.json();
-      dispatch(setUser(data.body.userName));
+      dispatch(setUsername(data.body.userName));
     } else {
       const errorData = await response.json();
       throw new Error(`Erreur lors de la requête: ${errorData.message}`);
