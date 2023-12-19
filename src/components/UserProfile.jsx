@@ -25,11 +25,13 @@ const UserProfile = () => {
   return (
     <main className="main bg-dark">
       <div className="header">
+          <div>
+            <h1>Welcome back<br />{user.userName}</h1>            
+          </div>
         {isEditing ? (
           <EditProfileForm onCancel={() => setIsEditing(false)} />
         ) : (
           <div>
-            <h1>Welcome back<br />{user.userName}</h1>
             <button className="edit-button" onClick={handleEditButtonClick}>
               Edit Name
             </button>

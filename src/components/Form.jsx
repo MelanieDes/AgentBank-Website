@@ -7,15 +7,21 @@ const Form = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
-  const handleSignIn = () => {
-    signIn(email, password, dispatch, navigate);
+  const handleSignIn = async () => {
+    try {     
+      await signIn(username, password, dispatch, navigate);
+    } catch (error) {
+      setError("Erreur lors de la connexion. Veuillez vérifier vos identifiants.");
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     await handleSignIn();
   };
 
@@ -24,7 +30,7 @@ const Form = () => {
             <form onSubmit={handleSubmit}>
                         <div className="input-wrapper">
                             <label htmlFor="username" >Username</label>
-                            <input type="text" id="username" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                            <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)}/>
                         </div>
                         <div className="input-wrapper">
                             <label htmlFor="password">Password</label>
@@ -33,7 +39,8 @@ const Form = () => {
                         <div className="input-remember">
                             <input type="checkbox" id="remember-me" />
                             <label htmlFor="remember-me">Remember me</label>
-                        </div>               
+                        </div> 
+                        {error && <div className="error-message">{error}</div>}              
                         <button type="submit" className="sign-in-button" onClick={handleSignIn}>Sign In</button>    
                     </form>
             

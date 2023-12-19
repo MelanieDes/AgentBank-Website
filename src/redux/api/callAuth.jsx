@@ -1,4 +1,3 @@
-// import { setToken, setUser, setUsername } from "../reducers/authSlice";
 import { setToken, setUser } from "../reducers/authSlice";
 
 const headers = {
@@ -6,7 +5,9 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+// Fonction pour la connexion de l'utilisateur.
 export const signIn = async (username, password, dispatch, navigate) => {
+  // Création de l'objet contenant les informations de connexion.
   const data = {
     email: username,
     password: password,
@@ -19,49 +20,53 @@ export const signIn = async (username, password, dispatch, navigate) => {
       body: JSON.stringify(data),
     });
 
-    if (!response.ok) {
-      console.error('Erreur lors de la requête de connexion');
-      return;
+    if (response.ok) {
+      // Extraction du token depuis la réponse JSON.
+      const responseData = await response.json();
+      const token = responseData.body.token;
+
+      // Dispatche le token dans le Redux store
+      dispatch(setToken(token));
+      
+      await dispatch(fetchUserProfile);
+
+      navigate('/users');
+    } else {
+      // Affiche une erreur en cas de problème avec la requête de connexion.
+      console.error('Erreur lors de la requête de connexion:', response.status, response.statusText);
     }
-
-    const responseData = await response.json();
-    const token = responseData.body.token;
-
-    // Dispatche le token dans le Redux store
-    dispatch(setToken(token));
-    navigate('/users');
   } catch (error) {
-    console.error("Erreur lors de la requête", error);
+    // Affiche une erreur en cas d'erreur lors de l'exécution de la requête.
+    console.error("Erreur lors de la requête:", error);
   }
 };
 
-export const fetchUserProfile = async (dispatch) => {
-  const state = JSON.parse(localStorage.getItem('reduxState'));
-  const token = state.auth.token;
-
-  const headers = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  };
-
+// Fonction pour récupérer le profil de l'utilisateur.
+export const fetchUserProfile = async (token, dispatch) => {
   try {
+    
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
     const response = await fetch('http://localhost:3001/api/v1/user/profile', {
       method: 'POST',
       headers: headers,
     });
 
-    if (!response.ok) {
-      console.error('Erreur lors de la requête de profil');
-      return;
+    if (response.ok) {
+      const data = await response.json();
+      dispatch(setUser(data.body));
+    } else {
+      console.error('Erreur lors de la requête de profil:', response.status, response.statusText);
     }
-
-    const data = await response.json();    
-    dispatch(setUser(data.body));
   } catch (error) {
-    console.error('Erreur lors de la requête', error);
+    console.error('Erreur lors de la requête:', error);
   }
 };
 
+// Fonction pour mettre à jour le nom d'utilisateur.
 export const updateUsername = async (token, newUsername, dispatch) => {
   try {
     
@@ -74,16 +79,15 @@ export const updateUsername = async (token, newUsername, dispatch) => {
       body: JSON.stringify({ userName: newUsername }),
     });
 
-    if (!response.ok) {
+    if (response.ok) {
+      const data = await response.json();
+      dispatch(setUser(data.body.userName));
+    } else {
       const errorData = await response.json();
-      throw new Error(`Error: ${errorData.message}`);
+      throw new Error(`Erreur lors de la requête: ${errorData.message}`);
     }
-
-    const data = await response.json();
-    dispatch(setUser(data.body.userName)); 
-
   } catch (error) {
-    console.error('Erreur lors de la requête', error);
-  } 
+    console.error('Erreur lors de la requête:', error);
+  }
 };
 
