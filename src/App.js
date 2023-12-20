@@ -4,16 +4,24 @@ import Home from "./Pages/Home";
 import Users from "./Pages/Users";
 import Sign from "./Pages/Sign";
 import Error from "./Pages/Error";
+import Nav from './components/Nav';
+import Footer from './components/Footer';
+import { useSelector } from 'react-redux';
 
 function App() {  
+
+  const token = useSelector((state) => state.auth.token);
+
   return (   
-      <Router>    
+      <Router>  
+        <Nav />  
         <Routes>
           <Route path='/' element={<Home />} />              
-          <Route path='/users' element={<Users />} />        
+          <Route path='/user' element={token ? <Users /> : <Error />} />        
           <Route path='/sign' element={<Sign />} />
           <Route path='/*' element={<Error />} />
-        </Routes>            
+        </Routes> 
+        <Footer />           
       </Router>    
   );
 }

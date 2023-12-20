@@ -20,11 +20,11 @@ const authSlice = createSlice({
       state.user = {...state.user, ...action.payload};
     },
     setUsername: (state, action) => {
-      state.userName = action.payload.data.body.userName;
+      state.user.userName = action.payload;
     },
     logout: (state) => {
       state.token = null;
-      state.user = null;
+      state.user = "";
     },     
   },
 });

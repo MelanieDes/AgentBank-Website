@@ -5,7 +5,7 @@ import { fetchUserProfile } from '../redux/api/callAuth';
 
 const UserProfile = () => {
   const user = useSelector((state) => state.auth.user);
-  const token = useSelector((state) => state.auth.token); // Ajoutez cette ligne
+  const token = useSelector((state) => state.auth.token); 
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useDispatch();
 
@@ -24,14 +24,7 @@ const UserProfile = () => {
 
   const handleEditButtonClick = () => {
     setIsEditing(true);
-  };
-
-  // Utilisez localStorage pour stocker le nom d'utilisateur
-  useEffect(() => {
-    if (user && user.userName) {
-      localStorage.setItem('userName', user.userName);
-    }
-  }, [user]);
+  }; 
 
 
   return (

@@ -1,5 +1,5 @@
 // EditProfileForm.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUsername } from '../redux/api/callAuth';
 
@@ -8,10 +8,15 @@ const EditProfileForm = ({ onCancel }) => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-  const [editedUsername, setEditedUsername] = useState(user.userName || ""); 
+  const [editedUsername, setEditedUsername] = useState(user.userName); 
   const [firstname, setFirstname] = useState(user.firstName); 
   const [lastname, setLastname] = useState(user.lastName); 
  
+
+  // Mettez à jour editedUsername lorsque user.userName change
+  useEffect(() => {
+    setEditedUsername(user.userName);
+  }, [user.userName]);
 
   const handleSaveButtonClick = async () => {
     await updateUsername(token, editedUsername, dispatch);

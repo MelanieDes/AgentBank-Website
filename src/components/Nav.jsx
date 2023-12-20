@@ -1,19 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/img/argentBankLogo.png";
 import { logout } from '../redux/reducers/authSlice';
+import { useNavigate } from "react-router-dom";
 
 
 function Nav() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);  
   const token = useSelector((state) => state.auth.token);
 
   const handleLogout = () => {
+    navigate('/')
     // Dispatchez l'action de déconnexion ici
-    dispatch(logout());
-    // Redirigez l'utilisateur vers la page de connexion (à adapter en fonction de votre application)
-    // par exemple, navigate('/login') si vous utilisez react-router-dom
-    window.location.href = '/';
+    dispatch(logout());    
   };
       
     return (
