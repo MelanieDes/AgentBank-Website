@@ -29,9 +29,11 @@ function Nav() {
           <div>
           {token ? (
             <div className="main-nav-auth">
-              <p>{user.userName}</p>
-              <i class="fa-solid fa-user"></i>
-              <i class="fa-solid fa-gear"></i>
+              <div className="main-nav-auth-profil">{user.userName}</div>
+              <div>
+                <i className="fa-solid fa-user"></i>
+                <i className="fa-solid fa-gear"></i>
+              </div>             
               <button className="main-nav-item" onClick={handleLogout}>Logout</button>
             </div>
             

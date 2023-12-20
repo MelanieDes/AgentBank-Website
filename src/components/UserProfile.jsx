@@ -20,10 +20,18 @@ const UserProfile = () => {
 
     fetchData();
   }, [token, dispatch]); // Ajoutez `token` à la liste des dépendances
+  
 
   const handleEditButtonClick = () => {
     setIsEditing(true);
   };
+
+  // Utilisez localStorage pour stocker le nom d'utilisateur
+  useEffect(() => {
+    if (user && user.userName) {
+      localStorage.setItem('userName', user.userName);
+    }
+  }, [user]);
 
 
   return (
@@ -35,7 +43,7 @@ const UserProfile = () => {
         {isEditing ? (
           <EditProfileForm onCancel={() => setIsEditing(false)} />
         ) : (
-          <div>
+          <div className='edit-button-container'>
             <button className="edit-button" onClick={handleEditButtonClick}>
               Edit Name
             </button>
