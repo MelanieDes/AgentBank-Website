@@ -1,19 +1,12 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
   title: Bank Argent API documentation
   description: Contains all available API endpoints in this codebase
-  version: '1.0.0'
-  termsOfService: 'http://swagger.io/terms/'
+  version: "1.0.1"  
 host: localhost:3001
 basePath: /api/v1
 schemes:
   - http
-consumes:
-  - application/json
-  - application/xml
-produces:
-  - application/json
-  - application/xml
 paths:
   /user/login:
     post:
@@ -27,183 +20,225 @@ paths:
           description: Login Payload
           required: true
           schema:
-            $ref: '#/definitions/Login'
+            $ref: "#/definitions/Login"
       produces:
         - application/json
       responses:
-        '200':
+        "200":
           description: Login Successfully
           schema:
-            $ref: '#/definitions/LoginResponse'
-        '400':
+            $ref: "#/definitions/LoginResponse"
+        "400":
           description: Invalid Fields
-        '500':
+        "401":
+          description: Unauthorized
+        "500":
           description: Internal Server Error
-  /user/signup:
-    post:
+  
+  /accounts/:
+    get:
       tags:
         - User Module
-      summary: Signup
-      description: API for Signup
-      parameters:
-        - in: body
-          name: body
-          description: Signup Payload
-          required: true
-          schema:
-            $ref: '#/definitions/User'
-      produces:
-        - application/json
+      summary: User Account API
+      description: get user account
       responses:
-        '200':
-          description: Signup Successfully
+        "200":
+          description: User accounts successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
+            $ref: "#/definitions/UserAccount"
+        "400":
           description: Invalid Fields
-        '500':
+        "401":
+          description: Unauthorized
+        "500":
           description: Internal Server Error
-  /user/profile:
-    post:
+  /account/{accountId}/transactions/:
+    get:
       security:
         - Bearer: []
       tags:
         - User Module
-      summary: User Profile API
-      description: API for fetching a user profile
-      #produces:
-       # - application/json
+      summary: Account Transactions API
+      description: Get account transactions
+      parameters:
+        - in: path
+          name: accountId
+          description: User account ID
+          type: string
+          required: true
       responses:
-        '200':
-          description: User profile retrieved successully
+        "200":
+          description: Account transactions successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
+            $ref: "#/definitions/AccountTransactions"
+        "400":
           description: Invalid Fields
-        '500':
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+  /accounts/{accountId}/transactions/{transactionId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: Account Transactions API
+      description: Get account transactions
+      parameters:
+        - in: path
+          name: accountId
+          description: User account ID
+          type: string
+          required: true
+        - in: path
+          name: transactionId
+          description: Transaction ID
+          type: integer
+          required: true
+      responses:
+        "200":
+          description: Account transactions successfully
+          schema:
+            $ref: "#/definitions/AccountTransactions"
+        "400":
+          description: Invalid Fields
+        "401":
+          description: Unauthorized
+        "500":
           description: Internal Server Error
     put:
       security:
         - Bearer: []
       tags:
         - User Module
-      summary: User Profile API
-      description: API for updating a user profile
+      summary: Account Transactions API
+      description:  Get account transactions
       parameters:
+        - in: path
+          name: accountId
+          description: User account ID
+          type: string
+          required: true
         - in: body
           name: body
           description: Update user profile attributes
           required: true
           schema:
-            $ref: '#/definitions/UserProfile'
+            $ref: "#/definitions/UpdateTransactionDetails"
+        - in: path
+          name: transactionId
+          description: Transaction ID
+          type: integer
+          required: true
       produces:
         - application/json
       responses:
-        '200':
-          description: User profile retrieved successully
-          schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
+        "200":
+          description: User profile successfully
+        "400":
           description: Invalid Fields
-        '500':
-          description: Internal Server Error
-# Partie ajouté
-  /user/{userID}/transaction:
-    get:
-      tags:
-        - Transaction Module
-      summary: User Transactions API
-      description: obtenir les transactions d'un utilisateur
-      parameters:
-        - in: 
-          name: userId
-          description: User Id
-          required: true          
-      responses:
-        '200':
-          description: Successfully display transaction
-          schema:
-            $ref: '#/definitions/UserTransaction'
-        '400':
-          description: Invalid Fields
-        '500':
-          description: Internal Server Error
-  /user/{userID}/transaction/{transactionId}:
-    get:
-      tags:
-        - Transaction Module
-      summary: User Transactions API
-      description: obtenir une transaction d'un utilisateur
-      parameters:
-        - in: 
-          name: userId
-          description: User Id
-          required: true  
-        - in: 
-          name: transactionId
-          description: Transaction Id
-          required: true        
-      responses:
-        '200':
-          description: Transaction Successfully
-          schema:
-            $ref: '#/definitions/UserTransaction'
-        '400':
-          description: Invalid Fields
-        '500':
-          description: Internal Server Error
-# securityDefinitions:
-#   Bearer:
-#     type: apiKey
-#     name: Authorization
-#     in: header
-# definitions:
-#   User:
-#     properties:
-#       email:
-#         type: string
-#         description: user email
-#       password:
-#         type: string
-#         description: user password
-#       firstName:
-#         type: string
-#         description: user first name
-#       lastName:
-#         type: string
-#         description: user last name
-#       userName:
-#         type: string
-#         description: user public name
-#   Login:
-#     properties:
-#       email:
-#         type: string
-#         description: user email
-#       password:
-#         type: string
-#         description: user password
-#   ApiResponse:
-#     type: object
-#     properties:
-#       status:
-#         type: integer
-#       message:
-#         type: string
-#       body:
-#         type: object
-#         properties:
-#           id:
-#             type: string
-#           email:
-#             type: string
-#   LoginResponse:
-#     type: object
-#     properties:
-#       token:
-#         type: string
-#   UserProfile:
-#     type: object
-#     properties:
-#       userName:
-#         type: string
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error       
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  User:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+      firstName:
+        type: string
+        description: user first name
+      lastName:
+        type: string
+        description: user last name
+      userName:
+        type: string
+        description: user public name
+  Login:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+  ApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          email:
+            type: string
+  LoginResponse:
+    type: object
+    properties:
+      token:
+        type: string
+  UserProfile:
+    type: object
+    properties:
+      userName:
+        type: string
+  UserAccount:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          account-title:
+            type: string
+          account-balance:
+            type: integer
+          account-description:
+            type: string
+  AccountTransactions:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          date:
+            type: string
+          description:
+            type: string
+          amount:
+            type: string
+          type:
+            type: string
+          category:
+            type: string
+          note:
+            type: string
+  UpdateTransactionDetails:
+    type: object
+    properties:
+      category:
+        type: string
+      note:
+        type: string
