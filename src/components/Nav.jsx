@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/img/argentBankLogo.png";
 import { logout } from '../redux/reducers/authSlice';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 function Nav() {
@@ -18,14 +18,14 @@ function Nav() {
       
     return (
         <nav className="main-nav">
-          <a className="main-nav-logo" href={"./"}>
-            <img
+          <Link to="/" className="main-nav-logo">
+          <img
               className="main-nav-logo-image"
               src={logo}
               alt="Argent Bank Logo"
             />
             <h1 className="sr-only">Argent Bank</h1>
-          </a>
+          </Link>          
           <div>
           {token ? (
             <div className="main-nav-auth">
@@ -33,8 +33,12 @@ function Nav() {
               <div>
                 <i className="fa-solid fa-user"></i>
                 <i className="fa-solid fa-gear"></i>
-              </div>             
-              <button className="main-nav-item" onClick={handleLogout}>Logout</button>
+              </div>
+              {token && (
+                <Link className="main-nav-item" to="/" onClick={handleLogout}>
+                  Logout
+                </Link>
+              )}               
             </div>
             
           ) : (
